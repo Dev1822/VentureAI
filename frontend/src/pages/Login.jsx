@@ -38,8 +38,8 @@ export default function Login() {
       {/* ═══════ LEFT SIDE — BRANDING PANEL ═══════ */}
       <div className="hidden lg:flex w-1/2 relative bg-emerald-50 overflow-hidden flex-col justify-between p-12 border-r border-slate-200/60">
         {/* Soft abstract shapes in the background */}
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-white rounded-full mix-blend-multiply filter blur-3xl opacity-60 -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-emerald-100/50 rounded-full mix-blend-multiply filter blur-3xl opacity-60 translate-x-1/3 translate-y-1/3" />
+        <div className="absolute top-0 left-0 w-125 h-500px bg-white rounded-full mix-blend-multiply filter blur-3xl opacity-60 -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-100 h-400px bg-emerald-100/50 rounded-full mix-blend-multiply filter blur-3xl opacity-60 translate-x-1/3 translate-y-1/3" />
 
         <div className="relative z-10 flex flex-col justify-between h-full">
           {/* Top logo */}

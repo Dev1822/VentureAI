@@ -46,8 +46,8 @@ export default function Signup() {
       <div className="hidden lg:flex w-1/2 relative bg-slate-50 overflow-hidden flex-col justify-between p-12 border-r border-slate-200/60">
 
         {/* Soft geometric backgrounds */}
-        <div className="absolute top-1/4 right-0 w-[400px] h-[400px] bg-blue-100/40 rounded-full mix-blend-multiply blur-3xl" />
-        <div className="absolute bottom-0 left-1/4 w-[300px] h-[300px] bg-emerald-100/40 rounded-full mix-blend-multiply blur-3xl" />
+        <div className="absolute top-1/4 right-0 w-100 h-100px bg-blue-100/40 rounded-full mix-blend-multiply blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-75px h-75px bg-emerald-100/40 rounded-full mix-blend-multiply blur-3xl" />
 
         <div className="relative z-10 flex flex-col justify-between h-full">
           {/* Top logo */}
