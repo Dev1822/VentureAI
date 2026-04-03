@@ -10,126 +10,115 @@ import { useNavigate } from "react-router-dom";
 export default function Landing() {
   const navigate = useNavigate();
   return (
-    <div className="bg-[#f7f9fc] text-slate-900 font-inter">
+    <div className="bg-mesh min-h-screen text-slate-900 font-inter">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
 
         {/* NAVBAR */}
-        <nav className="flex justify-between items-center py-4 sm:py-6">
-          <div className="text-xl sm:text-2xl font-extrabold bg-linear-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
-            VentureAI
+        <nav className="flex justify-between items-center py-6 sm:py-8">
+          <div className="text-xl sm:text-2xl font-extrabold text-slate-800 tracking-tight cursor-pointer">
+            VentureAI.
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-6">
-
-            {/* Hidden only on small screens */}
-            <div className="hidden md:flex items-center gap-6">
-              {["Features", "Use Cases"].map((item) => (
-                <span
-                  key={item}
-                  className="text-slate-600 hover:text-black cursor-pointer text-sm font-medium"
-                >
-                  {item}
-                </span>
-              ))}
+          <div className="flex items-center gap-4 sm:gap-8">
+            <div className="flex items-center gap-3">
+              <button
+                className="text-slate-600 hover:text-slate-900 font-medium text-sm px-3 py-2 transition-colors"
+                onClick={() => navigate("/login")}
+              >
+                Log in
+              </button>
+              <button
+                className="premium-btn px-4 sm:px-5 py-2.5 text-xs sm:text-sm rounded-lg font-medium whitespace-nowrap"
+                onClick={() => navigate("/signup")}
+              >
+                Get Started
+              </button>
             </div>
-
-            {/* ALWAYS VISIBLE */}
-            <span className="text-slate-600 cursor-pointer text-sm whitespace-nowrap" onClick={() => navigate("/login")}>
-              Log in
-            </span>
-
-            <button className="px-3 sm:px-4 py-2 text-xs sm:text-sm rounded-md bg-linear-to-r from-green-500 to-emerald-500 text-white shadow whitespace-nowrap" onClick={() => navigate("/signup")}>
-              Get Started
-            </button>
           </div>
         </nav>
 
         {/* HERO */}
-        <section className="py-12 sm:py-16 lg:py-20">
-          <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
+        <section className="py-12 sm:py-20 lg:py-24">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
             {/* LEFT */}
-            <div className="flex-1 text-center lg:text-left">
-              <h1 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold leading-tight mb-6">
-                Validate your startup idea with AI in minutes.
+            <div className="flex-1 text-center lg:text-left z-10">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.15] text-slate-900 mb-6 tracking-tight">
+                Validate your startup idea <br className="hidden lg:block" /> in minutes, not months.
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0">
-                Stop guessing. Intelligence uses real-time market data,
-                competitor analysis, and AI to score your venture.
+              <p className="text-lg text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                Stop guessing and start building. We use real-time market data,
+                competitor analysis, and predictive models to score your venture's viability.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button className="flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-linear-to-r from-green-500 to-emerald-500 text-white shadow w-full sm:w-auto" onClick={() => navigate("/signup")}>
+                <button
+                  className="premium-btn flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold shadow-sm w-full sm:w-auto"
+                  onClick={() => navigate("/signup")}
+                >
                   Start Free Validation
-                </button>
-
-                <button className="flex items-center justify-center gap-2 px-6 py-3 rounded-md border border-slate-300 w-full sm:w-auto">
-                  View Example
                 </button>
               </div>
             </div>
 
             {/* RIGHT CARD */}
-            <div className="flex-1 w-full max-w-md lg:max-w-xl bg-white border rounded-2xl shadow-xl p-6 sm:p-8 flex flex-col sm:flex-row gap-6 sm:gap-8">
+            <div className="flex-1 w-full max-w-md lg:max-w-xl premium-card p-6 sm:p-8 flex flex-col sm:flex-row gap-8 z-10">
 
               {/* SCORE */}
-              <div className="flex-1 flex flex-col items-center sm:border-r sm:pr-6">
-                <h3 className="font-bold mb-4">Venture Score</h3>
+              <div className="flex-1 flex flex-col items-center justify-center sm:border-r border-slate-100 sm:pr-8">
+                <h3 className="font-semibold text-slate-700 mb-6 text-sm uppercase tracking-wider">Venture Score</h3>
 
-                <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center">
-                  <svg viewBox="0 0 160 160" className="w-full h-full">
-                    <circle cx="80" cy="80" r="68" stroke="#e2e8f0" strokeWidth="12" fill="none" />
+                <div className="relative w-32 h-32 flex items-center justify-center">
+                  <svg viewBox="0 0 160 160" className="w-full h-full -rotate-90">
+                    <circle cx="80" cy="80" r="68" stroke="#f1f5f9" strokeWidth="10" fill="none" />
                     <circle
                       cx="80"
                       cy="80"
                       r="68"
-                      stroke="url(#grad)"
-                      strokeWidth="12"
+                      stroke="#10b981"
+                      strokeWidth="10"
                       strokeDasharray="427"
-                      strokeDashoffset="76"
                       strokeLinecap="round"
-                      transform="rotate(-90 80 80)"
                       fill="none"
+                      className="animate-chart-draw"
                     />
-                    <defs>
-                      <linearGradient id="grad">
-                        <stop offset="0%" stopColor="#22c55e" />
-                        <stop offset="100%" stopColor="#10b981" />
-                      </linearGradient>
-                    </defs>
                   </svg>
-
-                  <span className="absolute text-2xl sm:text-3xl font-extrabold">
-                    82
-                  </span>
+                  <div className="absolute flex flex-col items-center">
+                    <span className="text-4xl font-extrabold text-slate-900">82</span>
+                    <span className="text-xs font-medium text-emerald-600">/ 100</span>
+                  </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-500 mt-3 font-semibold text-center">
-                  High Viability Potential
+                <p className="text-xs text-slate-500 mt-5 font-medium text-center bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+                  High Viability
                 </p>
               </div>
 
               {/* GRAPH */}
-              <div className="flex-[1.5] flex flex-col justify-center">
-                <h3 className="font-bold mb-4 sm:mb-6 text-center sm:text-left">
-                  Market Growth Projection
+              <div className="flex-[1.2] flex flex-col justify-center">
+                <h3 className="font-semibold text-slate-700 mb-6 text-sm uppercase tracking-wider text-center sm:text-left">
+                  Market Growth
                 </h3>
 
-                <div className="flex justify-between items-end h-32 sm:h-40">
+                <div className="flex justify-between items-end h-36 gap-2">
                   {[35, 48, 65, 82, 100].map((h, i) => (
-                    <div key={i} className="flex flex-col items-center gap-1 sm:gap-2 w-6 sm:w-8 h-full">
-                      <div className="flex-1 flex items-end w-full">
+                    <div key={i} className="flex flex-col items-center gap-3 w-8 h-full group">
+                      <div className="flex-1 flex items-end w-full relative">
+                        {/* Tooltip on hover */}
+                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                          {h}%
+                        </div>
                         <div
-                          className={`w-full rounded-t-md ${i === 2
-                            ? "bg-linear-to-t from-green-500 to-emerald-500"
-                            : "bg-slate-300"
+                          className={`w-full rounded-t-sm transition-all duration-500 ease-out ${i === 4
+                            ? "bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.3)]"
+                            : "bg-slate-200 hover:bg-slate-300"
                             }`}
                           style={{ height: `${h}%` }}
                         />
                       </div>
-                      <span className="text-[10px] sm:text-xs text-slate-500 font-semibold">
-                        {2023 + i}
+                      <span className="text-[10px] text-slate-400 font-medium">
+                        '{23 + i}
                       </span>
                     </div>
                   ))}
@@ -141,61 +130,77 @@ export default function Landing() {
         </section>
 
         {/* FEATURES */}
-        <section className="py-12 sm:py-16 lg:py-20">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold mb-4">
+        <section className="py-16 sm:py-24">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
               Everything you need to launch
             </h2>
-            <p className="text-slate-600 max-w-xl mx-auto text-sm sm:text-base">
-              Replace weeks of research with instant AI insights.
+            <p className="text-slate-500 max-w-xl mx-auto text-lg">
+              Replace weeks of tedious research with instant, actionable insights.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
-                icon: <PieChart />,
+                icon: <PieChart size={24} />,
                 title: "Market Analysis",
-                desc: "Quickly find out the total market size and how it will grow.",
+                desc: "Discover your total addressable market and forecast growth accurately.",
               },
               {
-                icon: <Crosshair />,
-                title: "Competitor Intelligence",
-                desc: "Find competitors and identify gaps.",
+                icon: <Crosshair size={24} />,
+                title: "Competitor Intel",
+                desc: "Identify key players, their weaknesses, and find your unique gap.",
               },
               {
-                icon: <Map />,
+                icon: <Map size={24} />,
                 title: "Actionable Roadmaps",
-                desc: "Get AI-powered startup strategies.",
+                desc: "Receive step-by-step startup strategies tailored to your exact niche.",
               },
             ].map((f, i) => (
-              <div key={i} className="bg-white p-6 sm:p-8 rounded-xl border shadow-sm">
-                <div className="mb-4 text-green-500">{f.icon}</div>
-                <h3 className="font-bold text-lg mb-2">{f.title}</h3>
-                <p className="text-slate-600 text-sm sm:text-base">{f.desc}</p>
+              <div key={i} className="premium-card p-8 group">
+                <div className="mb-6 h-12 w-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 group-hover:scale-110 transition-transform duration-300">
+                  {f.icon}
+                </div>
+                <h3 className="font-bold text-slate-900 text-xl mb-3 tracking-tight">{f.title}</h3>
+                <p className="text-slate-500 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* CTA */}
-        <section className="bg-linear-to-r from-green-500 to-emerald-500 text-white rounded-2xl py-12 sm:py-16 lg:py-20 px-6 sm:px-10 text-center my-12 sm:my-16">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold mb-4">
-            Ready to validate your idea?
-          </h2>
-          <p className="mb-6 sm:mb-8 opacity-90 text-sm sm:text-base">
-            Join founders building what users actually want.
-          </p>
+        <section className="bg-slate-900 text-white rounded-3xl overflow-hidden py-16 sm:py-20 px-6 sm:px-10 text-center my-16 sm:my-24 relative soft-shadow">
+          {/* Subtle background decoration */}
+          <div className="absolute top-0 right-0 -m-32 w-64 h-64 bg-emerald-500 rounded-full blur-[100px] opacity-20"></div>
+          <div className="absolute bottom-0 left-0 -m-32 w-64 h-64 bg-blue-500 rounded-full blur-[100px] opacity-20"></div>
 
-          <button className="bg-white text-green-600 px-6 py-3 rounded-md font-semibold flex items-center gap-2 mx-auto" onClick={() => navigate("signup")}>
-            Generate Report <Zap size={18} />
-          </button>
+          <div className="relative z-10">
+            <h2 className="text-3xl sm:text-4xl font-extrabold mb-5 tracking-tight">
+              Ready to validate your idea?
+            </h2>
+            <p className="mb-10 text-slate-300 text-lg max-w-xl mx-auto">
+              Join thousands of founders building what users actually want. Stop wasting time on doomed ventures.
+            </p>
+
+            <button
+              className="bg-emerald-500 hover:bg-emerald-400 text-white px-8 py-4 rounded-xl font-semibold flex items-center gap-2 mx-auto transition-colors shadow-[0_4px_14px_rgba(16,185,129,0.4)]"
+              onClick={() => navigate("/signup")}
+            >
+              Generate Free Report <Zap size={18} className="fill-white" />
+            </button>
+          </div>
         </section>
 
         {/* FOOTER */}
-        <footer className="py-8 sm:py-10 border-t flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-          <div className="font-bold text-black">VentureAI</div>
-          <div>©2026 VentureAI</div>
+        <footer className="py-10 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-6 mt-10">
+          <div className="font-extrabold text-slate-800 text-lg tracking-tight">VentureAI.</div>
+          <div className="flex gap-6 text-sm font-medium text-slate-500">
+            <a href="#" className="hover:text-slate-900 transition-colors">Twitter</a>
+            <a href="#" className="hover:text-slate-900 transition-colors">Terms</a>
+            <a href="#" className="hover:text-slate-900 transition-colors">Privacy</a>
+          </div>
+          <div className="text-sm text-slate-400">© 2026 VentureAI</div>
         </footer>
 
       </div>

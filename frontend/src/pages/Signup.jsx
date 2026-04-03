@@ -1,128 +1,131 @@
 import { useNavigate } from "react-router-dom";
-import { Mail, Lock, User, ArrowRight, CheckCircle, Sparkles, Zap, Target } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, CheckCircle, Target, Check } from "lucide-react";
 import { useState } from "react";
 
 const benefits = [
-  { icon: <Zap size={18} />, text: "Instant AI validation reports" },
-  { icon: <Target size={18} />, text: "Competitor & market analysis" },
-  { icon: <CheckCircle size={18} />, text: "Free forever — no credit card" },
+  { icon: <Check size={18} className="text-emerald-600" />, text: "Instant AI validation generation" },
+  { icon: <Check size={18} className="text-blue-600" />, text: "Real competitive gap analysis" },
+  { icon: <Check size={18} className="text-violet-600" />, text: "Free forever, no card needed" },
 ];
 
 export default function Signup() {
-const [name, setName] = useState("");
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-const handleSignup = async () => {
-  try {
-    const res = await fetch("http://localhost:5000/api/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, email, password }),
-    });
+  const handleSignup = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      localStorage.setItem("token", data.token);
-      navigate("/"); // or dashboard
-    } else {
-      alert(data.message);
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userName", data.user.name);
+        navigate("/dashboard");
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      alert("Error signing up");
     }
-  } catch (err) {
-    alert("Error signing up");
-  }
-};
+  };
 
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div className="min-h-screen flex bg-auth-mesh" style={{ fontFamily: "'Inter', sans-serif" }}>
 
       {/* ═══════ LEFT SIDE — BRANDING PANEL ═══════ */}
-      <div className="hidden lg:flex w-1/2 relative bg-linear-to-br from-emerald-600 via-green-500 to-emerald-400 overflow-hidden">
-        {/* Decorative shapes */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full translate-x-1/3 -translate-y-1/3" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full -translate-x-1/4 translate-y-1/4" />
-        <div className="absolute top-1/3 right-1/4 w-32 h-32 bg-white/5 rounded-full" />
+      <div className="hidden lg:flex w-1/2 relative bg-slate-50 overflow-hidden flex-col justify-between p-12 border-r border-slate-200/60">
 
-        <div className="relative z-10 flex flex-col justify-between p-12 w-full">
+        {/* Soft geometric backgrounds */}
+        <div className="absolute top-1/4 right-0 w-[400px] h-[400px] bg-blue-100/40 rounded-full mix-blend-multiply blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-[300px] h-[300px] bg-emerald-100/40 rounded-full mix-blend-multiply blur-3xl" />
+
+        <div className="relative z-10 flex flex-col justify-between h-full">
           {/* Top logo */}
-          <div className="text-2xl font-extrabold text-white cursor-pointer" onClick={() => navigate("/")}>
-            VentureAI
+          <div className="text-2xl font-extrabold text-slate-800 tracking-tight cursor-pointer" onClick={() => navigate("/")}>
+            VentureAI.
           </div>
 
           {/* Center content */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-white text-4xl font-extrabold mb-4 leading-tight">
-                Start your journey.
+              <h2 className="text-slate-900 text-4xl font-extrabold mb-4 leading-tight tracking-tight">
+                Design your future <br /> with clarity.
               </h2>
-              <p className="text-white/75 text-base leading-relaxed max-w-sm">
-                Create your account and begin validating startup ideas with the power of AI.
+              <p className="text-slate-600 text-base leading-relaxed max-w-sm">
+                Join thousands of founders launching products people actually want. Stop building in the dark.
               </p>
             </div>
 
             {/* Benefits list */}
             <div className="space-y-4">
               {benefits.map((b, i) => (
-                <div key={i} className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-5 py-4 max-w-sm">
-                  <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center text-white shrink-0">
+                <div key={i} className="flex items-center gap-4 bg-white/80 backdrop-blur-md border border-slate-200/70 rounded-xl px-5 py-4 max-w-sm soft-shadow">
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200">
                     {b.icon}
                   </div>
-                  <span className="text-white font-medium text-sm">{b.text}</span>
+                  <span className="text-slate-700 font-medium text-sm">{b.text}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Bottom stat */}
-          <div className="flex items-center gap-4">
-            <div className="flex -space-x-2">
-              {["S", "M", "P", "A"].map((letter, i) => (
+          {/* Bottom Trust markers */}
+          <div className="flex items-center gap-4 mt-12 bg-white/60 p-4 rounded-2xl border border-slate-200/50 w-max soft-shadow">
+            <div className="flex -space-x-3">
+              {[
+                "https://api.dicebear.com/7.x/notionists/svg?seed=Felix",
+                "https://api.dicebear.com/7.x/notionists/svg?seed=Mia",
+                "https://api.dicebear.com/7.x/notionists/svg?seed=Max",
+                "https://api.dicebear.com/7.x/notionists/svg?seed=Lily",
+              ].map((src, i) => (
                 <div
                   key={i}
-                  className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/40 flex items-center justify-center text-white text-xs font-bold"
+                  className="w-10 h-10 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center overflow-hidden"
                 >
-                  {letter}
+                  <img src={src} alt="avatar" className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
             <div>
-              <div className="text-white font-bold text-sm">12,000+ founders</div>
-              <div className="text-white/60 text-xs">already validating ideas</div>
+              <div className="text-slate-800 font-bold text-sm tracking-tight">20,000+ reports ran</div>
+              <div className="text-slate-500 text-xs mt-0.5">Highly trusted community</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* ═══════ RIGHT SIDE — FORM ═══════ */}
-      <div className="flex w-full lg:w-1/2 items-center justify-center px-6 sm:px-10 bg-[#f7f9fc]">
-        <div className="w-full max-w-md">
+      <div className="flex w-full lg:w-1/2 items-center justify-center p-6 sm:p-12 relative">
+        <div className="w-full max-w-md premium-card p-10">
 
           {/* Mobile logo */}
           <div className="flex items-center gap-2 mb-10 lg:hidden">
-            <span className="font-extrabold text-xl text-gradient cursor-pointer" onClick={() => navigate("/")}>VentureAI</span>
+            <span className="font-extrabold text-2xl text-slate-800 tracking-tight cursor-pointer" onClick={() => navigate("/")}>VentureAI.</span>
           </div>
 
           {/* Heading */}
-          <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Create Account</h1>
-            <Sparkles size={22} className="text-green-500" />
-          </div>
-          <p className="text-slate-500 text-sm mb-8">
-            Get started with your free account. No credit card required.
+          <h1 className="text-3xl font-extrabold mb-3 text-slate-900 tracking-tight">Create Account</h1>
+          <p className="text-slate-500 text-sm mb-8 leading-relaxed">
+            Get started right away. No credit card ever required.
           </p>
 
           {/* Google-style button */}
-          <button className="w-full py-3 rounded-lg border border-slate-200 bg-white text-slate-700 font-medium text-sm hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 shadow-sm mb-6">
+          <button className="premium-btn-secondary w-full py-3.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-3 mb-6">
             <svg width="18" height="18" viewBox="0 0 24 24">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
             </svg>
             Sign up with Google
           </button>
@@ -130,92 +133,82 @@ const handleSignup = async () => {
           {/* Divider */}
           <div className="flex items-center gap-4 mb-6">
             <div className="flex-1 h-px bg-slate-200" />
-            <span className="text-xs text-slate-400 font-medium">or sign up with email</span>
+            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">or sign up with email</span>
             <div className="flex-1 h-px bg-slate-200" />
           </div>
 
           {/* Name */}
           <div className="mb-5">
-            <label className="text-xs font-semibold text-slate-500 block mb-2 tracking-wide">
-              FULL NAME
+            <label className="text-[11px] font-bold text-slate-500 block mb-2 tracking-widest uppercase">
+              Full Name
             </label>
             <div className="relative">
-              <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-<input
-  type="text"
-  placeholder="John Doe"
-  value={name}
-  onChange={(e) => setName(e.target.value)}
-/>
-
+              <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="John Doe"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="premium-input w-full pl-12 pr-4 py-3.5 text-sm"
+              />
             </div>
           </div>
 
           {/* Email */}
           <div className="mb-5">
-            <label className="text-xs font-semibold text-slate-500 block mb-2 tracking-wide">
-              EMAIL
+            <label className="text-[11px] font-bold text-slate-500 block mb-2 tracking-widest uppercase">
+              Email Address
             </label>
             <div className="relative">
-              <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-<input
-  type="email"
-  placeholder="you@example.com"
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
-/>
+              <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="premium-input w-full pl-12 pr-4 py-3.5 text-sm"
+              />
             </div>
           </div>
 
           {/* Password */}
           <div className="mb-5">
-            <label className="text-xs font-semibold text-slate-500 block mb-2 tracking-wide">
-              PASSWORD
+            <label className="text-[11px] font-bold text-slate-500 block mb-2 tracking-widest uppercase">
+              Password
             </label>
             <div className="relative">
-              <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-<input
-  type="password"
-  placeholder="Create a password"
-  value={password}
-  onChange={(e) => setPassword(e.target.value)}
-/>
-            </div>
-          </div>
-
-          {/* Confirm Password */}
-          <div className="mb-6">
-            <label className="text-xs font-semibold text-slate-500 block mb-2 tracking-wide">
-              CONFIRM PASSWORD
-            </label>
-            <div className="relative">
-              <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="password"
-                placeholder="Confirm your password"
-                className="input-glow w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 focus:outline-none bg-white shadow-sm text-sm transition-all"
+                placeholder="Create a password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="premium-input w-full pl-12 pr-4 py-3.5 text-sm"
               />
             </div>
           </div>
 
           {/* Button */}
-          <button className="btn-shine w-full py-3.5 rounded-lg text-white font-semibold text-sm bg-linear-to-r from-green-500 to-emerald-500 shadow-lg shadow-green-500/20 flex items-center justify-center gap-2" onClick={handleSignup}>
+          <button
+            className="premium-btn w-full py-3.5 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 mb-6"
+            onClick={handleSignup}
+          >
             Create Account
             <ArrowRight size={16} />
           </button>
 
           {/* Terms */}
-          <p className="text-[11px] text-slate-400 mt-4 text-center leading-relaxed">
+          <p className="text-[11px] text-slate-400 text-center leading-relaxed mb-6">
             By creating an account, you agree to our{" "}
-            <span className="text-green-600 cursor-pointer">Terms of Service</span> and{" "}
-            <span className="text-green-600 cursor-pointer">Privacy Policy</span>.
+            <span className="text-slate-600 font-medium cursor-pointer hover:underline border-b border-transparent">Terms of Service</span> and{" "}
+            <span className="text-slate-600 font-medium cursor-pointer hover:underline border-b border-transparent">Privacy Policy</span>.
           </p>
 
           {/* Footer */}
-          <p className="text-sm text-slate-500 mt-6 text-center">
+          <p className="text-sm text-slate-500 text-center">
             Already have an account?{" "}
             <span
-              className="text-green-600 font-semibold cursor-pointer hover:text-green-700 transition-colors"
+              className="text-slate-800 font-bold cursor-pointer hover:text-emerald-600 transition-colors"
               onClick={() => navigate("/login")}
             >
               Sign in
