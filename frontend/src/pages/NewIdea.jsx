@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, LayoutDashboard, LogOut, PlusCircle, Clock, ArrowLeftRight, Loader2 } from "lucide-react";
+import { ArrowRight, LayoutDashboard, LogOut, PlusCircle, Clock, TrendingUp, Briefcase, ArrowLeftRight, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function NewIdea() {
@@ -87,11 +87,17 @@ export default function NewIdea() {
                                 <PlusCircle size={16} />
                                 New Idea
                             </button>
-                            <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+                            <button
+                                className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                                onClick={() => navigate("/history")}
+                            >
                                 <Clock size={16} />
                                 History
                             </button>
-                            <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+                            <button
+                                className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                                onClick={() => navigate("/compare")}
+                            >
                                 <ArrowLeftRight size={16} />
                                 Compare
                             </button>
@@ -99,12 +105,12 @@ export default function NewIdea() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="text-sm font-semibold text-slate-700 hidden sm:block">
+                        <div className="text-sm font-semibold text-slate-900 hidden sm:block">
                             {userName || "User"}
                         </div>
                         <button
                             onClick={handleLogout}
-                            className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                            className="p-2 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors"
                         >
                             <LogOut size={18} />
                         </button>
@@ -259,15 +265,15 @@ export default function NewIdea() {
                 <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6">
                     <div className="bg-white rounded-3xl p-10 max-w-sm w-full text-center shadow-2xl flex flex-col items-center">
                         <div className="w-20 h-20 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 relative">
-                            <Loader2 className="w-10 h-10 text-emerald-500 animate-spin" />
-                            <div className="absolute inset-0 border-4 border-emerald-500/20 rounded-2xl animate-ping opacity-20"></div>
+                            <Loader2 className="w-10 h-10 text-emerald-600 animate-spin" />
+                            <div className="absolute inset-0 border-4 border-emerald-600/20 rounded-2xl animate-ping opacity-20"></div>
                         </div>
                         <h3 className="text-xl font-bold text-slate-900 mb-2">Analyzing Your Idea</h3>
                         <p className="text-slate-500 text-sm leading-relaxed mb-6">
                             Our AI is assessing market demand, competitors, and revenue models. This usually takes about 10-20 seconds.
                         </p>
                         <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                            <div className="bg-emerald-500 h-full animate-progress-fast"></div>
+                            <div className="bg-emerald-600 h-full animate-progress-fast"></div>
                         </div>
                     </div>
                 </div>

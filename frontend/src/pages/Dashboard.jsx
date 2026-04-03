@@ -50,14 +50,16 @@ export default function Dashboard() {
     const stats = [
         { label: "TOTAL IDEAS", value: reports.length },
         { label: "COMPLETED", value: reports.length },
-        { label: "AVG SCORE", value: reports.length > 0 
-            ? Math.round(reports.reduce((acc, r) => acc + (r.analysis?.overallScore || 0), 0) / reports.length) 
-            : 0 
+        {
+            label: "AVG SCORE", value: reports.length > 0
+                ? Math.round(reports.reduce((acc, r) => acc + (r.analysis?.overallScore || 0), 0) / reports.length)
+                : 0
         },
-        { label: "SUCCESS RATE", value: reports.length > 0
-            ? Math.round((reports.filter(r => r.analysis?.verdict === 'high').length / reports.length) * 100) + "%"
-            : "0%",
-            highlight: true 
+        {
+            label: "SUCCESS RATE", value: reports.length > 0
+                ? Math.round((reports.filter(r => r.analysis?.verdict?.toLowerCase() === 'high').length / reports.length) * 100) + "%"
+                : "0%",
+            highlight: true
         }
     ];
 
@@ -84,11 +86,17 @@ export default function Dashboard() {
                                 <PlusCircle size={16} />
                                 New Idea
                             </button>
-                            <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+                            <button
+                                className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                                onClick={() => navigate("/history")}
+                            >
                                 <Clock size={16} />
                                 History
                             </button>
-                            <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+                            <button
+                                className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                                onClick={() => navigate("/compare")}
+                            >
                                 <ArrowLeftRight size={16} />
                                 Compare
                             </button>
@@ -96,12 +104,12 @@ export default function Dashboard() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="text-sm font-semibold text-slate-700 hidden sm:block">
+                        <div className="text-sm font-semibold text-slate-900 hidden sm:block">
                             {userName || "User"}
                         </div>
                         <button
                             onClick={handleLogout}
-                            className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                            className="p-2 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors"
                         >
                             <LogOut size={18} />
                         </button>
@@ -130,7 +138,7 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-10">
                     {stats.map((stat, i) => (
                         <div key={i} className="premium-card p-5 sm:p-6 flex flex-col justify-between h-32">
-                            <span className="text-xs font-bold text-slate-400 tracking-wider uppercase">
+                            <span className="text-xs font-bold text-slate-500 tracking-wider uppercase">
                                 {stat.label}
                             </span>
                             <div className={`text-4xl font-black tracking-tight ${stat.highlight ? 'text-blue-600' : 'text-slate-900'}`}>
@@ -143,7 +151,7 @@ export default function Dashboard() {
                 {/* ═══════ RECENT ANALYSES (MAIN PANEL) ═══════ */}
                 <div className="premium-card p-6 sm:p-8 min-h-100 flex flex-col">
                     <div className="flex justify-between items-center mb-8">
-                        <h2 className="text-xs font-bold text-slate-400 tracking-wider uppercase">
+                        <h2 className="text-xs font-bold text-slate-500 tracking-wider uppercase">
                             RECENT ANALYSES
                         </h2>
                         <button className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors" onClick={() => navigate("/dashboard")}>
@@ -153,39 +161,38 @@ export default function Dashboard() {
 
                     {loading ? (
                         <div className="flex-1 flex items-center justify-center">
-                            <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+                            <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
                         </div>
                     ) : reports.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {reports.map((report) => (
-                                <div 
-                                    key={report._id} 
+                                <div
+                                    key={report._id}
                                     onClick={() => navigate(`/reports/${report._id}`)}
-                                    className="group p-6 rounded-2xl border border-slate-100 bg-white hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-500/5 transition-all cursor-pointer relative overflow-hidden"
+                                    className="group p-6 rounded-2xl border border-slate-200 bg-white hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-600/5 transition-all cursor-pointer relative overflow-hidden"
                                 >
                                     <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-full -mr-8 -mt-8 group-hover:bg-emerald-100 transition-colors"></div>
-                                    
+
                                     <h3 className="font-bold text-slate-900 mb-2 truncate pr-6 group-hover:text-emerald-700 transition-colors">
                                         {report.name}
                                     </h3>
                                     <p className="text-xs text-slate-500 mb-6 line-clamp-2">
                                         {report.description}
                                     </p>
-                                    
+
                                     <div className="flex items-center justify-between mt-auto">
                                         <div className="flex flex-col">
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Score</span>
-                                            <span className={`text-xl font-black ${
-                                                (report.analysis?.overallScore || 0) > 70 ? 'text-emerald-500' : 
-                                                (report.analysis?.overallScore || 0) > 40 ? 'text-amber-500' : 
-                                                'text-red-500'
-                                            }`}>
+                                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Score</span>
+                                            <span className={`text-xl font-black ${(report.analysis?.overallScore || 0) > 70 ? 'text-emerald-600' :
+                                                (report.analysis?.overallScore || 0) > 40 ? 'text-amber-500' :
+                                                    'text-red-500'
+                                                }`}>
                                                 {report.analysis?.overallScore || 0}%
                                             </span>
                                         </div>
                                         <div className="flex flex-col items-end">
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Date</span>
-                                            <span className="text-xs font-medium text-slate-600">
+                                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Date</span>
+                                            <span className="text-xs font-medium text-slate-900">
                                                 {new Date(report.createdAt).toLocaleDateString()}
                                             </span>
                                         </div>

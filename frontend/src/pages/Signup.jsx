@@ -51,7 +51,7 @@ export default function Signup() {
 
         <div className="relative z-10 flex flex-col justify-between h-full">
           {/* Top logo */}
-          <div className="text-2xl font-extrabold text-slate-800 tracking-tight cursor-pointer" onClick={() => navigate("/")}>
+          <div className="text-2xl font-extrabold text-slate-900 tracking-tight cursor-pointer" onClick={() => navigate("/")}>
             VentureAI.
           </div>
 
@@ -61,7 +61,7 @@ export default function Signup() {
               <h2 className="text-slate-900 text-4xl font-extrabold mb-4 leading-tight tracking-tight">
                 Design your future <br /> with clarity.
               </h2>
-              <p className="text-slate-600 text-base leading-relaxed max-w-sm">
+              <p className="text-slate-900 text-base leading-relaxed max-w-sm">
                 Join thousands of founders launching products people actually want. Stop building in the dark.
               </p>
             </div>
@@ -73,7 +73,7 @@ export default function Signup() {
                   <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200">
                     {b.icon}
                   </div>
-                  <span className="text-slate-700 font-medium text-sm">{b.text}</span>
+                  <span className="text-slate-900 font-medium text-sm">{b.text}</span>
                 </div>
               ))}
             </div>
@@ -97,7 +97,7 @@ export default function Signup() {
               ))}
             </div>
             <div>
-              <div className="text-slate-800 font-bold text-sm tracking-tight">20,000+ reports ran</div>
+              <div className="text-slate-900 font-bold text-sm tracking-tight">20,000+ reports ran</div>
               <div className="text-slate-500 text-xs mt-0.5">Highly trusted community</div>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function Signup() {
 
           {/* Mobile logo */}
           <div className="flex items-center gap-2 mb-10 lg:hidden">
-            <span className="font-extrabold text-2xl text-slate-800 tracking-tight cursor-pointer" onClick={() => navigate("/")}>VentureAI.</span>
+            <span className="font-extrabold text-2xl text-slate-900 tracking-tight cursor-pointer" onClick={() => navigate("/")}>VentureAI.</span>
           </div>
 
           {/* Heading */}
@@ -133,7 +133,7 @@ export default function Signup() {
           {/* Divider */}
           <div className="flex items-center gap-4 mb-6">
             <div className="flex-1 h-px bg-slate-200" />
-            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">or sign up with email</span>
+            <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">or sign up with email</span>
             <div className="flex-1 h-px bg-slate-200" />
           </div>
 
@@ -143,7 +143,7 @@ export default function Signup() {
               Full Name
             </label>
             <div className="relative">
-              <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="text"
                 placeholder="John Doe"
@@ -160,7 +160,7 @@ export default function Signup() {
               Email Address
             </label>
             <div className="relative">
-              <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="email"
                 placeholder="you@example.com"
@@ -177,7 +177,7 @@ export default function Signup() {
               Password
             </label>
             <div className="relative">
-              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="password"
                 placeholder="Create a password"
@@ -198,17 +198,17 @@ export default function Signup() {
           </button>
 
           {/* Terms */}
-          <p className="text-[11px] text-slate-400 text-center leading-relaxed mb-6">
+          <p className="text-[11px] text-slate-500 text-center leading-relaxed mb-6">
             By creating an account, you agree to our{" "}
-            <span className="text-slate-600 font-medium cursor-pointer hover:underline border-b border-transparent">Terms of Service</span> and{" "}
-            <span className="text-slate-600 font-medium cursor-pointer hover:underline border-b border-transparent">Privacy Policy</span>.
+            <span className="text-slate-900 font-medium cursor-pointer hover:underline border-b border-transparent">Terms of Service</span> and{" "}
+            <span className="text-slate-900 font-medium cursor-pointer hover:underline border-b border-transparent">Privacy Policy</span>.
           </p>
 
           {/* Footer */}
           <p className="text-sm text-slate-500 text-center">
             Already have an account?{" "}
             <span
-              className="text-slate-800 font-bold cursor-pointer hover:text-emerald-600 transition-colors"
+              className="text-slate-900 font-bold cursor-pointer hover:text-emerald-600 transition-colors"
               onClick={() => navigate("/login")}
             >
               Sign in

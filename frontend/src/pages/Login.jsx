@@ -43,7 +43,7 @@ export default function Login() {
 
         <div className="relative z-10 flex flex-col justify-between h-full">
           {/* Top logo */}
-          <div className="text-2xl font-extrabold text-slate-800 tracking-tight cursor-pointer" onClick={() => navigate("/")}>
+          <div className="text-2xl font-extrabold text-slate-900 tracking-tight cursor-pointer" onClick={() => navigate("/")}>
             VentureAI.
           </div>
 
@@ -55,12 +55,12 @@ export default function Login() {
                   <BarChart3 size={24} className="text-emerald-700" />
                 </div>
                 <div>
-                  <div className="text-slate-800 font-bold text-sm">Market Analysis</div>
+                  <div className="text-slate-900 font-bold text-sm">Market Analysis</div>
                   <div className="text-slate-500 text-xs">Real-time insights</div>
                 </div>
               </div>
               <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 rounded-full w-[82%]" />
+                <div className="h-full bg-emerald-600 rounded-full w-[82%]" />
               </div>
             </div>
 
@@ -70,7 +70,7 @@ export default function Login() {
                   <TrendingUp size={24} className="text-blue-600" />
                 </div>
                 <div>
-                  <div className="text-slate-800 font-bold text-sm">Growth Score</div>
+                  <div className="text-slate-900 font-bold text-sm">Growth Score</div>
                   <div className="text-slate-500 text-xs">AI-powered tracking</div>
                 </div>
               </div>
@@ -91,7 +91,7 @@ export default function Login() {
             <h2 className="text-slate-900 text-3xl font-extrabold mb-4 tracking-tight leading-tight">
               Welcome back.
             </h2>
-            <p className="text-slate-600 text-base leading-relaxed max-w-sm">
+            <p className="text-slate-900 text-base leading-relaxed max-w-sm">
               Sign in to access your validation reports and continue analyzing startup ideas.
             </p>
           </div>
@@ -104,7 +104,7 @@ export default function Login() {
 
           {/* Mobile logo */}
           <div className="flex items-center gap-2 mb-10 lg:hidden">
-            <span className="font-extrabold text-2xl text-slate-800 tracking-tight cursor-pointer" onClick={() => navigate("/")}>VentureAI.</span>
+            <span className="font-extrabold text-2xl text-slate-900 tracking-tight cursor-pointer" onClick={() => navigate("/")}>VentureAI.</span>
           </div>
 
           {/* Heading */}
@@ -119,7 +119,7 @@ export default function Login() {
               Email Address
             </label>
             <div className="relative">
-              <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="email"
                 placeholder="you@example.com"
@@ -136,7 +136,7 @@ export default function Login() {
               Password
             </label>
             <div className="relative">
-              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="password"
                 placeholder="Enter your password"
@@ -166,7 +166,7 @@ export default function Login() {
           {/* Divider */}
           <div className="flex items-center gap-4 mb-8">
             <div className="flex-1 h-px bg-slate-200" />
-            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">or continue with</span>
+            <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">or continue with</span>
             <div className="flex-1 h-px bg-slate-200" />
           </div>
 
@@ -185,7 +185,7 @@ export default function Login() {
           <p className="text-sm text-slate-500 mt-10 text-center">
             Don't have an account?{" "}
             <span
-              className="text-slate-800 font-bold cursor-pointer hover:text-emerald-600 transition-colors"
+              className="text-slate-900 font-bold cursor-pointer hover:text-emerald-600 transition-colors"
               onClick={() => navigate("/signup")}
             >
               Configure yours
