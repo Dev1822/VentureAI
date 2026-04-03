@@ -100,7 +100,7 @@ export default function ReportDetail() {
                     </div>
 
                     {/* SCORE GAUGE */}
-                    <div className="premium-card p-8 flex flex-col items-center justify-center w-full max-w-[280px]">
+                    <div className="premium-card p-8 flex flex-col items-center justify-center w-full max-w-70">
                         <h3 className="font-bold text-slate-400 text-[10px] uppercase tracking-[0.2em] mb-6">Viability Score</h3>
                         <div className="relative w-40 h-40 flex items-center justify-center">
                             <svg viewBox="0 0 160 160" className="w-full h-full -rotate-90">
@@ -199,7 +199,7 @@ export default function ReportDetail() {
                         <div className="space-y-3">
                             {analysis.revenueOptions?.strategies?.map((strat, i) => (
                                 <div key={i} className="flex gap-3 items-start">
-                                    <CheckCircle2 size={16} className="text-emerald-500 mt-0.5 flex-shrink-0" />
+                                    <CheckCircle2 size={16} className="text-emerald-500 mt-0.5 shrink-0" />
                                     <span className="text-slate-500 text-sm">{strat}</span>
                                 </div>
                             ))}

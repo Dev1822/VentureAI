@@ -141,7 +141,7 @@ export default function Dashboard() {
                 </div>
 
                 {/* ═══════ RECENT ANALYSES (MAIN PANEL) ═══════ */}
-                <div className="premium-card p-6 sm:p-8 min-h-[400px] flex flex-col">
+                <div className="premium-card p-6 sm:p-8 min-h-100 flex flex-col">
                     <div className="flex justify-between items-center mb-8">
                         <h2 className="text-xs font-bold text-slate-400 tracking-wider uppercase">
                             RECENT ANALYSES

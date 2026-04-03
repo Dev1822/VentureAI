@@ -4,7 +4,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import NewIdea from './pages/NewIdea'
-import ReportDetail from './pages/ReportDetail'
+import ReportDetail from './pages/ReportDetails'
 import { Routes, Route } from 'react-router-dom'
 
 function App() {
