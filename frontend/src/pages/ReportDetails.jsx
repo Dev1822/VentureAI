@@ -14,6 +14,20 @@ import {
 } from "lucide-react";
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
+import {
+    Radar,
+    RadarChart,
+    PolarGrid,
+    PolarAngleAxis,
+    ResponsiveContainer,
+    BarChart,
+    Bar,
+    Cell,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+} from "recharts";
 
 const Typewriter = ({ text, delay = 15 }) => {
     const [displayedText, setDisplayedText] = useState("");
@@ -269,27 +283,28 @@ export default function ReportDetail() {
                     id="pdf-report"
                     className="bg-white rounded-[28px] shadow-sm border border-slate-200 p-8 sm:p-10"
                 >
-                    {/* HEADER SECTION */}
-                    <div className="flex flex-col md:flex-row gap-12 items-center mb-16">
-                        <div className="flex-1">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold tracking-wider uppercase mb-6 border border-emerald-100">
-                                <Zap size={12} className="fill-emerald-700" />
-                                Validation Complete
-                            </div>
-                            <h1 className="text-4xl sm:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
-                                {report.name}
-                            </h1>
-                            <p className="text-lg text-slate-500 leading-relaxed max-w-2xl min-h-[80px]">
-                                <Typewriter text={report.description} delay={10} />
-                            </p>
+                    {/* Header Top: Title & Description */}
+                    <div className="mb-12">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold tracking-wider uppercase mb-6 border border-emerald-100">
+                            <Zap size={12} className="fill-emerald-700" />
+                            Validation Complete
                         </div>
+                        <h1 className="text-4xl sm:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+                            {report.name}
+                        </h1>
+                        <p className="text-lg text-slate-500 leading-relaxed max-w-3xl min-h-[60px]">
+                            <Typewriter text={report.description} delay={10} />
+                        </p>
+                    </div>
 
-                        {/* SCORE GAUGE */}
-                        <div className="premium-card p-8 flex flex-col items-center justify-center w-full max-w-70">
-                            <h3 className="font-bold text-slate-500 text-[10px] uppercase tracking-[0.2em] mb-6">Viability Score</h3>
-                            <div className="relative w-40 h-40 flex items-center justify-center">
+                    {/* VISUAL DASHBOARD: GAUGE & RADAR */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+                        {/* LEFT: VIABILITY SCORE GAUGE */}
+                        <div className="premium-card p-8 flex flex-col items-center justify-center bg-slate-50/50">
+                            <h3 className="font-bold text-slate-500 text-[10px] uppercase tracking-[0.2em] mb-8">Viability Matrix</h3>
+                            <div className="relative w-48 h-48 flex items-center justify-center">
                                 <svg viewBox="0 0 160 160" className="w-full h-full -rotate-90">
-                                    <circle cx="80" cy="80" r="70" stroke="#f1f5f9" strokeWidth="12" fill="none" />
+                                    <circle cx="80" cy="80" r="70" stroke="#e2e8f0" strokeWidth="12" fill="none" />
                                     <circle
                                         cx="80"
                                         cy="80"
@@ -304,17 +319,89 @@ export default function ReportDetail() {
                                     />
                                 </svg>
                                 <div className="absolute flex flex-col items-center">
-                                    <span className="text-5xl font-black text-slate-900">{animatedScore || 0}</span>
-                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Percent</span>
+                                    <div className="flex items-baseline">
+                                        <span className="text-6xl font-black text-slate-900 tracking-tighter">{animatedScore || 0}</span>
+                                        <span className="text-xl font-bold text-slate-400 font-inter">%</span>
+                                    </div>
+                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Founders Score</span>
                                 </div>
                             </div>
-                            <div className={`mt-6 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${analysis.verdict === 'high' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
-                                analysis.verdict === 'medium' ? 'bg-amber-50 text-amber-600 border border-amber-100' :
-                                    'bg-red-50 text-red-600 border border-red-100'
+                            <div className={`mt-8 px-6 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-sm ${analysis.verdict === 'high' ? 'bg-emerald-600 text-white shadow-emerald-200' :
+                                analysis.verdict === 'medium' ? 'bg-amber-500 text-white shadow-amber-200' :
+                                    'bg-red-500 text-white shadow-red-200'
                                 }`}>
-                                {analysis.verdict || "Low"} Confidence
+                                {analysis.verdict || "Low"} Conviction
                             </div>
+                        </div>
 
+                        {/* RIGHT: DIMENSION RADAR CHART */}
+                        <div className="premium-card p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <h3 className="font-bold text-slate-500 text-[10px] uppercase tracking-[0.2em] mb-4">Dimension breakdown</h3>
+                            <div className="w-full h-[280px]">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <RadarChart cx="50%" cy="50%" outerRadius="75%" data={[
+                                        { subject: 'Demand', A: analysis.marketDemand?.score || 0, fullMark: 100 },
+                                        { subject: 'Edges', A: analysis.competitorAssessment?.score || 0, fullMark: 100 },
+                                        { subject: 'Users', A: analysis.userDemographics?.score || 0, fullMark: 100 },
+                                        { subject: 'Revenue', A: analysis.revenueOptions?.score || 0, fullMark: 100 },
+                                    ]}>
+                                        <PolarGrid stroke="#e2e8f0" strokeWidth={1} />
+                                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748b', fontSize: 11, fontWeight: 700 }} />
+                                        <Radar
+                                            name="Idea"
+                                            dataKey="A"
+                                            stroke="#10b981"
+                                            strokeWidth={3}
+                                            fill="#10b981"
+                                            fillOpacity={0.15}
+                                        />
+                                    </RadarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* SCORE COMPARISON BAR CHART SECTION */}
+                    <div className="mb-16">
+                        <div className="flex items-center gap-3 mb-8">
+                            <div className="h-px flex-1 bg-slate-100" />
+                            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.25em]">Metric analysis</h3>
+                            <div className="h-px flex-1 bg-slate-100" />
+                        </div>
+                        <div className="premium-card p-8 bg-slate-50/30">
+                            <div className="w-full h-48 sm:h-64">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart
+                                        data={[
+                                            { name: 'Market', value: analysis.marketDemand?.score || 0, color: '#3b82f6' },
+                                            { name: 'Competition', value: analysis.competitorAssessment?.score || 0, color: '#8b5cf6' },
+                                            { name: 'Demographics', value: analysis.userDemographics?.score || 0, color: '#10b981' },
+                                            { name: 'Monetization', value: analysis.revenueOptions?.score || 0, color: '#f59e0b' },
+                                        ]}
+                                        margin={{ top: 20, right: 30, left: -20, bottom: 0 }}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600, fill: '#64748b' }} dy={10} />
+                                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} dx={-5} domain={[0, 100]} />
+                                        <Tooltip
+                                            cursor={{ fill: '#f8fafc' }}
+                                            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontSize: '12px', fontWeight: 'bold' }}
+                                        />
+                                        <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={40}>
+                                            {
+                                                [
+                                                    { name: 'Market', value: analysis.marketDemand?.score || 0, color: '#3b82f6' },
+                                                    { name: 'Competition', value: analysis.competitorAssessment?.score || 0, color: '#8b5cf6' },
+                                                    { name: 'Demographics', value: analysis.userDemographics?.score || 0, color: '#10b981' },
+                                                    { name: 'Monetization', value: analysis.revenueOptions?.score || 0, color: '#f59e0b' },
+                                                ].map((entry, index) => (
+                                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                                ))
+                                            }
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
                     </div>
 
