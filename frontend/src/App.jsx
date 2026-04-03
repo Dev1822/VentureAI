@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import NewIdea from './pages/NewIdea'
+import ReportDetail from './pages/ReportDetail'
 import { Routes, Route } from 'react-router-dom'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/new-idea" element={<NewIdea />} />
+        <Route path="/reports/:id" element={<ReportDetail />} />
       </Routes>
     </>
   )

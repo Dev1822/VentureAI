@@ -5,19 +5,40 @@ import {
     Clock,
     ArrowLeftRight,
     LogOut,
-    FolderOpen
+    FolderOpen,
+    Loader2
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Dashboard() {
     const navigate = useNavigate();
     const [userName, setUserName] = useState("");
+    const [reports, setReports] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const storedName = localStorage.getItem("userName");
         if (storedName) {
             setUserName(storedName);
         }
+
+        const fetchReports = async () => {
+            try {
+                const response = await fetch("http://localhost:5000/api/reports", {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+                const data = await response.json();
+                setReports(data);
+            } catch (error) {
+                console.error("Error fetching reports:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchReports();
     }, []);
 
     const handleLogout = () => {
@@ -25,6 +46,20 @@ export default function Dashboard() {
         localStorage.removeItem("userName");
         navigate("/");
     };
+
+    const stats = [
+        { label: "TOTAL IDEAS", value: reports.length },
+        { label: "COMPLETED", value: reports.length },
+        { label: "AVG SCORE", value: reports.length > 0 
+            ? Math.round(reports.reduce((acc, r) => acc + (r.analysis?.overallScore || 0), 0) / reports.length) 
+            : 0 
+        },
+        { label: "SUCCESS RATE", value: reports.length > 0
+            ? Math.round((reports.filter(r => r.analysis?.verdict === 'high').length / reports.length) * 100) + "%"
+            : "0%",
+            highlight: true 
+        }
+    ];
 
     return (
         <div className="min-h-screen bg-mesh font-inter text-slate-900 pb-12">
@@ -93,12 +128,7 @@ export default function Dashboard() {
 
                 {/* ═══════ STATS ROW ═══════ */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-10">
-                    {[
-                        { label: "TOTAL IDEAS", value: "0" },
-                        { label: "COMPLETED", value: "0" },
-                        { label: "AVG SCORE", value: "0" },
-                        { label: "SUCCESS RATE", value: "0%", highlight: true }
-                    ].map((stat, i) => (
+                    {stats.map((stat, i) => (
                         <div key={i} className="premium-card p-5 sm:p-6 flex flex-col justify-between h-32">
                             <span className="text-xs font-bold text-slate-400 tracking-wider uppercase">
                                 {stat.label}
@@ -116,29 +146,72 @@ export default function Dashboard() {
                         <h2 className="text-xs font-bold text-slate-400 tracking-wider uppercase">
                             RECENT ANALYSES
                         </h2>
-                        <button className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors">
+                        <button className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors" onClick={() => navigate("/dashboard")}>
                             View All
                         </button>
                     </div>
 
-                    <div className="flex-1 flex flex-col items-center justify-center py-12 text-center">
-                        {/* Empty State Illustration using soft colors */}
-                        <div className="w-24 h-24 mb-6 rounded-2xl bg-emerald-50 flex items-center justify-center border border-emerald-100">
-                            <FolderOpen size={48} className="text-emerald-300" strokeWidth={1.5} />
+                    {loading ? (
+                        <div className="flex-1 flex items-center justify-center">
+                            <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
                         </div>
+                    ) : reports.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {reports.map((report) => (
+                                <div 
+                                    key={report._id} 
+                                    onClick={() => navigate(`/reports/${report._id}`)}
+                                    className="group p-6 rounded-2xl border border-slate-100 bg-white hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-500/5 transition-all cursor-pointer relative overflow-hidden"
+                                >
+                                    <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-full -mr-8 -mt-8 group-hover:bg-emerald-100 transition-colors"></div>
+                                    
+                                    <h3 className="font-bold text-slate-900 mb-2 truncate pr-6 group-hover:text-emerald-700 transition-colors">
+                                        {report.name}
+                                    </h3>
+                                    <p className="text-xs text-slate-500 mb-6 line-clamp-2">
+                                        {report.description}
+                                    </p>
+                                    
+                                    <div className="flex items-center justify-between mt-auto">
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Score</span>
+                                            <span className={`text-xl font-black ${
+                                                (report.analysis?.overallScore || 0) > 70 ? 'text-emerald-500' : 
+                                                (report.analysis?.overallScore || 0) > 40 ? 'text-amber-500' : 
+                                                'text-red-500'
+                                            }`}>
+                                                {report.analysis?.overallScore || 0}%
+                                            </span>
+                                        </div>
+                                        <div className="flex flex-col items-end">
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Date</span>
+                                            <span className="text-xs font-medium text-slate-600">
+                                                {new Date(report.createdAt).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex-1 flex flex-col items-center justify-center py-12 text-center">
+                            <div className="w-24 h-24 mb-6 rounded-2xl bg-emerald-50 flex items-center justify-center border border-emerald-100">
+                                <FolderOpen size={48} className="text-emerald-300" strokeWidth={1.5} />
+                            </div>
 
-                        <p className="text-slate-500 mb-6 font-medium">
-                            No analyses yet. Start by validating your first idea.
-                        </p>
+                            <p className="text-slate-500 mb-6 font-medium">
+                                No analyses yet. Start by validating your first idea.
+                            </p>
 
-                        <button
-                            className="premium-btn px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 text-sm shadow-sm transition-all hover:-translate-y-0.5"
-                            onClick={() => navigate("/new-idea")}
-                        >
-                            <PlusCircle size={18} />
-                            Validate First Idea
-                        </button>
-                    </div>
+                            <button
+                                className="premium-btn px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 text-sm shadow-sm transition-all hover:-translate-y-0.5"
+                                onClick={() => navigate("/new-idea")}
+                            >
+                                <PlusCircle size={18} />
+                                Validate First Idea
+                            </button>
+                        </div>
+                    )}
                 </div>
 
             </main>

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, LayoutDashboard, LogOut, PlusCircle, Clock, ArrowLeftRight } from "lucide-react";
+import { ArrowRight, LayoutDashboard, LogOut, PlusCircle, Clock, ArrowLeftRight, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function NewIdea() {
@@ -14,6 +14,7 @@ export default function NewIdea() {
         targetAudience: "",
         keyFeatures: ""
     });
+    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
         const storedName = localStorage.getItem("userName");
@@ -32,10 +33,36 @@ export default function NewIdea() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Simulate validation process
-        alert("Analyzing your idea...");
+        setSubmitting(true);
+
+        try {
+            const response = await fetch("http://localhost:5000/api/reports", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify({
+                    name: formData.startupName,
+                    description: formData.description,
+                    industry: formData.industry,
+                    businessModel: formData.businessModel,
+                    targetAudience: formData.targetAudience,
+                    keyFeatures: formData.keyFeatures
+                })
+            });
+
+            if (!response.ok) throw new Error("Analysis failed");
+
+            const report = await response.json();
+            navigate(`/reports/${report._id}`);
+        } catch (error) {
+            console.error(error);
+            alert("Analysis failed. Please try again.");
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -207,15 +234,44 @@ export default function NewIdea() {
                     <div className="pt-4">
                         <button
                             type="submit"
-                            className="premium-btn w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-all hover:-translate-y-0.5"
+                            disabled={submitting}
+                            className="premium-btn w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            VALIDATE IDEA
-                            <ArrowRight size={18} />
+                            {submitting ? (
+                                <>
+                                    <Loader2 size={18} className="animate-spin" />
+                                    ANALYZING...
+                                </>
+                            ) : (
+                                <>
+                                    VALIDATE IDEA
+                                    <ArrowRight size={18} />
+                                </>
+                            )}
                         </button>
                     </div>
 
                 </form>
             </main>
+
+            {/* LOADING OVERLAY */}
+            {submitting && (
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6">
+                    <div className="bg-white rounded-3xl p-10 max-w-sm w-full text-center shadow-2xl flex flex-col items-center">
+                        <div className="w-20 h-20 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 relative">
+                            <Loader2 className="w-10 h-10 text-emerald-500 animate-spin" />
+                            <div className="absolute inset-0 border-4 border-emerald-500/20 rounded-2xl animate-ping opacity-20"></div>
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">Analyzing Your Idea</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed mb-6">
+                            Our AI is assessing market demand, competitors, and revenue models. This usually takes about 10-20 seconds.
+                        </p>
+                        <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                            <div className="bg-emerald-500 h-full animate-progress-fast"></div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
