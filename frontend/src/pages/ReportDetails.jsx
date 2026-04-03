@@ -10,7 +10,11 @@ import {
     Users,
     TrendingUp,
     CheckCircle2,
-    Loader2
+    Loader2,
+    PlusCircle,
+    Clock,
+    ArrowLeftRight,
+    Presentation
 } from "lucide-react";
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
@@ -251,6 +255,20 @@ export default function ReportDetail() {
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
+                        <button
+                            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                            onClick={() => navigate("/compare")}
+                        >
+                            <ArrowLeftRight size={16} />
+                            Compare
+                        </button>
+                        <button
+                            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                            onClick={() => navigate("/pitch-deck")}
+                        >
+                            <Presentation size={16} />
+                            Pitch Deck
+                        </button>
                         <button
                             className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 ${copied ? "text-emerald-600 bg-emerald-50" : "text-slate-900 hover:bg-slate-50"
                                 }`}

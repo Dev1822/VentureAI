@@ -396,6 +396,85 @@ Return the response strictly in this exact JSON structure and nothing else:
   }
 });
 
+// Generate Pitch Deck
+app.post("/api/reports/:id/pitch-deck", auth, async (req, res) => {
+  try {
+    const report = await Report.findOne({ _id: req.params.id, userId: req.user._id });
+    if (!report) return res.status(404).json({ message: "Report not found" });
+
+    const promptText = `
+You are an expert startup consultant. Based on the startup idea below, generate a professional 6-slide Pitch Deck. 
+Return ONLY a valid JSON object. Do not include markdown tags or any other text.
+
+Idea Name: ${report.name}
+Description: ${report.description}
+Industry: ${report.industry}
+Business Model: ${report.businessModel}
+
+Return strictly in this JSON format:
+{
+  "problem": "Pain point description",
+  "solution": "Your solution description",
+  "marketSize": "TAM/SAM/SOM or scale analysis",
+  "businessModel": "Revenue and unit economics",
+  "competitors": "Market landscape",
+  "gtmStrategy": "Acquiring first 1000 users"
+}
+`;
+
+    let pitchDeck;
+
+    if (!process.env.RAPID_API_KEY) {
+      console.warn("RapidAPI key missing. Falling back to mock pitch deck.");
+      pitchDeck = {
+        problem: `Founders and entrepreneurs currently lack a data-driven way to validate their ${report.industry} ideas quickly. High failure rates are often due to a lack of initial market understanding.`,
+        solution: `${report.name} provides instant AI-powered validation and strategic insights, allowing founders to fail fast or scale with confidence.`,
+        marketSize: "The global startup analytics and AI advisory market is projected to reach $12.5B by 2028, with millions of new small businesses starting annually.",
+        businessModel: `A ${report.businessModel} approach, likely starting with a freemium SaaS model followed by premium enterprise consulting tiers.`,
+        competitors: "Positioned as a more accessible alternative to traditional consultancies like McKinsey, and more specialized than general-purpose AI like ChatGPT.",
+        gtmStrategy: "Leverage content marketing on LinkedIn and Twitter, partner with startup incubators, and offer free initial Tier-1 reports to build a user base."
+      };
+    } else {
+      const url = 'https://chatgpt-42.p.rapidapi.com/gpt4';
+      const options = {
+        method: 'POST',
+        headers: {
+          'x-rapidapi-key': process.env.RAPID_API_KEY,
+          'x-rapidapi-host': 'chatgpt-42.p.rapidapi.com',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: promptText }],
+          web_access: false
+        })
+      };
+
+      const response = await fetch(url, options);
+      const resultText = await response.text();
+      
+      try {
+        pitchDeck = JSON.parse(resultText);
+      } catch (e) {
+        console.error("AI returned invalid JSON for pitch deck. Falling back to mock.");
+        pitchDeck = {
+          problem: "Difficulty in generating structured pitch content quickly.",
+          solution: "AI-powered slide generation based on validated startup metrics.",
+          marketSize: "Niche startup tool market.",
+          businessModel: "Feature-locked premium access.",
+          competitors: "Manual creation or generic AI tools.",
+          gtmStrategy: "Direct outreach to startup communities."
+        };
+      }
+    }
+
+    res.json(pitchDeck);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Pitch deck generation failed" });
+  }
+});
+
 
 // =========================
 // SERVER

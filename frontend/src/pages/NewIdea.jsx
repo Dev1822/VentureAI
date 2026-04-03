@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, LayoutDashboard, LogOut, PlusCircle, Clock, TrendingUp, Briefcase, ArrowLeftRight, Loader2 } from "lucide-react";
+import { ArrowRight, LayoutDashboard, LogOut, PlusCircle, Clock, TrendingUp, Briefcase, ArrowLeftRight, Zap, Lightbulb, Presentation, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function NewIdea() {
@@ -100,6 +100,13 @@ export default function NewIdea() {
                             >
                                 <ArrowLeftRight size={16} />
                                 Compare
+                            </button>
+                            <button
+                                className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                                onClick={() => navigate("/pitch-deck")}
+                            >
+                                <Presentation size={16} />
+                                Pitch Deck
                             </button>
                         </div>
                     </div>

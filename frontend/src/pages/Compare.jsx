@@ -10,7 +10,8 @@ import {
     Square,
     Zap,
     FileText,
-    ArrowUpRight
+    ArrowUpRight,
+    Presentation
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -118,6 +119,13 @@ export default function Compare() {
                             <button className="flex items-center gap-2 px-3 py-2 text-sm font-semibold rounded-lg bg-emerald-50 text-emerald-700">
                                 <ArrowLeftRight size={16} />
                                 Compare
+                            </button>
+                            <button
+                                className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                                onClick={() => navigate("/pitch-deck")}
+                            >
+                                <Presentation size={16} />
+                                Pitch Deck
                             </button>
                         </div>
                     </div>

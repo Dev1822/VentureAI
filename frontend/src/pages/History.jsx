@@ -8,7 +8,8 @@ import {
     Loader2,
     Calendar,
     ArrowUpRight,
-    Search
+    Search,
+    Presentation
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -96,6 +97,13 @@ export default function History() {
                             >
                                 <ArrowLeftRight size={16} />
                                 Compare
+                            </button>
+                            <button
+                                className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                                onClick={() => navigate("/pitch-deck")}
+                            >
+                                <Presentation size={16} />
+                                Pitch Deck
                             </button>
                         </div>
                     </div>
