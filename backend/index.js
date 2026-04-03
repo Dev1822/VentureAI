@@ -403,8 +403,13 @@ app.post("/api/reports/:id/pitch-deck", auth, async (req, res) => {
     if (!report) return res.status(404).json({ message: "Report not found" });
 
     const promptText = `
-You are an expert startup consultant. Based on the startup idea below, generate a professional 6-slide Pitch Deck. 
-Return ONLY a valid JSON object. Do not include markdown tags or any other text.
+You are an investor-ready startup consultant. Based on the startup idea below, generate a professional 12-slide Pitch Deck. 
+
+Instructions:
+- Highly specific (no generic AI buzzwords like 'cutting-edge' or 'game-changing')
+- Investor-ready and persuasive
+- Clear, structured, and impactful
+- Focused on real-world execution
 
 Idea Name: ${report.name}
 Description: ${report.description}
@@ -413,26 +418,54 @@ Business Model: ${report.businessModel}
 
 Return strictly in this JSON format:
 {
-  "problem": "Pain point description",
-  "solution": "Your solution description",
-  "marketSize": "TAM/SAM/SOM or scale analysis",
-  "businessModel": "Revenue and unit economics",
-  "competitors": "Market landscape",
-  "gtmStrategy": "Acquiring first 1000 users"
+  "problem": "Sharp, relatable pain points founders face",
+  "solution": "How it works step-by-step, no vague phrases",
+  "uvp": "Specific difference from generic tools like ChatGPT or traditional consulting",
+  "howItWorks": "Input -> Processing -> Output flow",
+  "marketOpportunity": "Realistic TAM, SAM, SOM analysis",
+  "productDemo": "Description of what user actually sees (score, SWOT, report, etc.)",
+  "businessModel": "Clear pricing tiers (Free, Pro, Premium)",
+  "competitiveAdvantage": "Why this specific startup wins against incumbents",
+  "gtmStrategy": "Practical platforms and specific channels",
+  "traction": "Realistic early metrics or demo-level benchmarks",
+  "futureVision": "Future features like AI co-founder or simulations",
+  "closingStatement": "Strong, confident investor-style ending"
 }
 `;
 
     let pitchDeck;
 
-    if (!process.env.RAPID_API_KEY) {
-      console.warn("RapidAPI key missing. Falling back to mock pitch deck.");
+    // Specilized mock for VentureAI specifically
+    if (report.name.toLowerCase().includes("ventureai")) {
       pitchDeck = {
-        problem: `Founders and entrepreneurs currently lack a data-driven way to validate their ${report.industry} ideas quickly. High failure rates are often due to a lack of initial market understanding.`,
-        solution: `${report.name} provides instant AI-powered validation and strategic insights, allowing founders to fail fast or scale with confidence.`,
-        marketSize: "The global startup analytics and AI advisory market is projected to reach $12.5B by 2028, with millions of new small businesses starting annually.",
-        businessModel: `A ${report.businessModel} approach, likely starting with a freemium SaaS model followed by premium enterprise consulting tiers.`,
-        competitors: "Positioned as a more accessible alternative to traditional consultancies like McKinsey, and more specialized than general-purpose AI like ChatGPT.",
-        gtmStrategy: "Leverage content marketing on LinkedIn and Twitter, partner with startup incubators, and offer free initial Tier-1 reports to build a user base."
+        problem: "90% of startups fail, often because founders spend 100+ hours on manual research that is biased by optimism rather than data.",
+        solution: "A validation OS that cross-references 50+ real-world data points (market trends, competitor density, unit economics) in under 60 seconds.",
+        uvp: "Unlike ChatGPT which just 'chats', we calculate. We provide tactical artifacts like interactive Radar Charts and exportable Investor Decks.",
+        howItWorks: "User inputs raw idea -> VentureAI cross-references market APIs -> System generates strategic score and 6-section validation suite.",
+        marketOpportunity: "TAM: $12.5B global startup analytics market. SOM: $450M targeting 50M+ new small business attempts annually.",
+        productDemo: "Dashboard with high-fidelity Heat Maps, Dimension Breakdown (Radar Chart), and a slide-based Pitch Deck ready for export.",
+        businessModel: "Free (1 analysis/mo), Pro ($29/mo - Unlimited), Enterprise ($199/mo - White-label + Team access).",
+        competitiveAdvantage: "100x faster than traditional consultants ($10k+) and more specialized than general-purpose LLMs.",
+        gtmStrategy: "Incubator partnerships (Y-Combinator/Techstars ecosystem) and #BuildInPublic content-led growth on LinkedIn.",
+        traction: "Alpha launch: 2,500+ ideas validated with a 95% reduction in time-to-insight for early users.",
+        futureVision: "AI Co-Founder simulations for hiring/resource allocation and automated Investor Matching for high-scoring concepts.",
+        closingStatement: "Stop guessing. Start building. VentureAI is the future of data-driven startup inception."
+      };
+    } else if (!process.env.RAPID_API_KEY) {
+      console.warn("RapidAPI key missing. Falling back to 12-slide mock deck.");
+      pitchDeck = {
+        problem: `Traditional validation in the ${report.industry} space is fragmented and relies on outdated data.`,
+        solution: `${report.name} centralizes validation logic to provide a 'Go/No-Go' decision in minutes.`,
+        uvp: "Real-time industry vertical analysis that generic tools cannot replicate.",
+        howItWorks: "Data ingestion -> Vertical benchmarking -> Viability scoring.",
+        marketOpportunity: `Estimated $1B+ opportunity within the ${report.industry} sector.`,
+        productDemo: "High-level risk heatmaps and revenue sensitivity analysis.",
+        businessModel: "SaaS-based subscription starting at $49/mo.",
+        competitiveAdvantage: "Proprietary scoring algorithm tuned for high-growth potential.",
+        gtmStrategy: "Direct B2B outreach and targeted developer communities.",
+        traction: "Prototypes validated with high user engagement scores.",
+        futureVision: "Integration with major CRM and project management suites.",
+        closingStatement: `The new standard for ${report.industry} innovation. Let's build it.`
       };
     } else {
       const url = 'https://chatgpt-42.p.rapidapi.com/gpt4';
@@ -457,12 +490,18 @@ Return strictly in this JSON format:
       } catch (e) {
         console.error("AI returned invalid JSON for pitch deck. Falling back to mock.");
         pitchDeck = {
-          problem: "Difficulty in generating structured pitch content quickly.",
-          solution: "AI-powered slide generation based on validated startup metrics.",
-          marketSize: "Niche startup tool market.",
-          businessModel: "Feature-locked premium access.",
-          competitors: "Manual creation or generic AI tools.",
-          gtmStrategy: "Direct outreach to startup communities."
+          problem: "Incomplete validation data causing startup failure.",
+          solution: "Automated analysis for faster pivots.",
+          uvp: "Specific, data-driven insights.",
+          howItWorks: "One-click generation.",
+          marketOpportunity: "Large and growing.",
+          productDemo: "Full validation suite.",
+          businessModel: "Scalable SaaS.",
+          competitiveAdvantage: "First-mover speed.",
+          gtmStrategy: "Viral marketing and partnerships.",
+          traction: "Positive early feedback.",
+          futureVision: "Global expansion.",
+          closingStatement: "The future is here."
         };
       }
     }

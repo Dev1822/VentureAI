@@ -15,7 +15,13 @@ import {
     Rocket,
     CheckCircle2,
     Search,
-    Download
+    Download,
+    Sparkles,
+    Eye,
+    Users,
+    Layout,
+    Monitor,
+    BarChart3
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { jsPDF } from "jspdf";
@@ -163,10 +169,16 @@ export default function PitchDeck() {
     const slides = pitchDeck ? [
         { id: "problem", title: "The Problem", icon: <Target className="text-rose-500" />, content: pitchDeck.problem },
         { id: "solution", title: "The Solution", icon: <Zap className="text-amber-500" />, content: pitchDeck.solution },
-        { id: "market", title: "Market Size", icon: <LineChart className="text-blue-500" />, content: pitchDeck.marketSize },
+        { id: "uvp", title: "Unique Value Proposition", icon: <Sparkles className="text-emerald-500" />, content: pitchDeck.uvp },
+        { id: "howItWorks", title: "How It Works", icon: <Layout className="text-blue-500" />, content: pitchDeck.howItWorks },
+        { id: "market", title: "Market Opportunity", icon: <LineChart className="text-indigo-500" />, content: pitchDeck.marketOpportunity },
+        { id: "demo", title: "Product Demo", icon: <Monitor className="text-cyan-500" />, content: pitchDeck.productDemo },
         { id: "model", title: "Business Model", icon: <DollarSign className="text-emerald-500" />, content: pitchDeck.businessModel },
-        { id: "competitors", title: "Competition", icon: <Shield className="text-violet-500" />, content: pitchDeck.competitors },
+        { id: "competition", title: "Competitive Advantage", icon: <BarChart3 className="text-violet-500" />, content: pitchDeck.competitiveAdvantage },
         { id: "gtm", title: "Go-to-Market", icon: <Rocket className="text-orange-500" />, content: pitchDeck.gtmStrategy },
+        { id: "traction", title: "Traction", icon: <Users className="text-sky-500" />, content: pitchDeck.traction },
+        { id: "vision", title: "Future Vision", icon: <Eye className="text-purple-500" />, content: pitchDeck.futureVision },
+        { id: "closing", title: "Closing Statement", icon: <CheckCircle2 className="text-emerald-600" />, content: pitchDeck.closingStatement },
     ] : [];
 
     return (
@@ -211,7 +223,7 @@ export default function PitchDeck() {
                         <div className="text-center mb-12">
                             <h1 className="text-4xl font-black tracking-tight text-slate-900 mb-4">AI Pitch Deck Generator</h1>
                             <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-                                Select an idea from your history to generate a professional 6-slide startup pitch deck in seconds.
+                                Select an idea from your history to generate a professional 12-slide startup pitch deck in seconds.
                             </p>
                         </div>
 
@@ -305,7 +317,7 @@ export default function PitchDeck() {
                             {/* CONTENT SLIDES */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {slides.map((slide) => (
-                                    <div key={slide.id} className="premium-card p-8 flex flex-col hover:border-emerald-200 transition-all h-[320px]">
+                                    <div key={slide.id} className="premium-card p-8 flex flex-col hover:border-emerald-200 transition-all min-h-[300px]">
                                         <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center mb-6 border border-slate-100">
                                             {slide.icon}
                                         </div>
