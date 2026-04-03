@@ -200,52 +200,93 @@ app.get("/api/reports/:id", auth, async (req, res) => {
   }
 });
 
-// Create new analysis (Mock AI)
+// Create new analysis (Rapid API)
 app.post("/api/reports", auth, async (req, res) => {
   try {
     const { name, description, industry, businessModel, targetAudience, keyFeatures } = req.body;
 
-    // Simulate AI Processing Delay
-    // In a real app, this is where you'd call OpenAI/Gemini
-    const generateAnalysis = (data) => {
-      const score = Math.floor(Math.random() * 40) + 50; // Random score between 50-90
-      const verdict = score > 75 ? "high" : score > 60 ? "medium" : "low";
+    const promptText = `
+You are an expert startup advisor and market analyst. Analyze the following startup idea and return ONLY a valid JSON object. Do not include markdown tags (like \`\`\`json) or any other text. 
 
-      return {
-        overallScore: score,
-        verdict,
-        marketDemand: {
-          score: Math.floor(Math.random() * 30) + 60,
-          analysis: `The ${data.industry} market is currently experiencing significant tailwinds. Given the focus on ${data.targetAudience}, there is a clear gap in the market for a solution that emphasizes ${data.keyFeatures || 'ease of use'}.`
-        },
-        competitorAssessment: {
-          score: Math.floor(Math.random() * 40) + 50,
-          analysis: `While there are established players in the ${data.industry} space, few target ${data.targetAudience} specifically with a ${data.businessModel} approach. Your competitive advantage lies in the integration of specialized features.`,
-          keyCompetitors: ["Incumbent A", "Startup B", "Traditional Methods"]
-        },
-        userDemographics: {
-          score: Math.floor(Math.random() * 30) + 65,
-          targetPersona: data.targetAudience,
-          behavior: "Highly engaged with digital solutions, looking for efficiency and value-driven experiences."
-        },
-        revenueOptions: {
-          score: Math.floor(Math.random() * 25) + 70,
-          strategies: [
-            `${data.businessModel}`,
-            "Tiered Subscription",
-            "Data Analytics Add-on"
-          ]
-        },
-        nextSteps: [
-          "Validate core value proposition with a landing page MVP.",
-          "Conduct 10 user interviews with the target demographic.",
-          "Refine the pricing model based on early feedback.",
-          "Develop a low-fidelity prototype of key features."
-        ]
-      };
+Idea Name: ${name}
+Description: ${description}
+Industry: ${industry}
+Business Model: ${businessModel}
+Target Audience: ${targetAudience}
+Key Features: ${keyFeatures}
+
+Return the response strictly in this exact JSON structure and nothing else:
+{
+  "overallScore": <number 1-100 indicating viability>,
+  "verdict": "<high, medium, or low>",
+  "marketDemand": {
+    "score": <number 1-100>,
+    "analysis": "<detailed paragraph about market demand>"
+  },
+  "competitorAssessment": {
+    "score": <number 1-100>,
+    "analysis": "<detailed paragraph about competition>",
+    "keyCompetitors": ["<competitor 1>", "<competitor 2>", "<competitor 3>"]
+  },
+  "userDemographics": {
+    "score": <number 1-100>,
+    "targetPersona": "<description of ideal customer>",
+    "behavior": "<description of user behavior>"
+  },
+  "revenueOptions": {
+    "score": <number 1-100>,
+    "strategies": ["<strategy 1>", "<strategy 2>", "<strategy 3>"]
+  },
+  "nextSteps": [
+    "<step 1>", "<step 2>", "<step 3>", "<step 4>"
+  ]
+}
+`;
+
+    const url = 'https://chatgpt-42.p.rapidapi.com/gpt4';
+    const options = {
+      method: 'POST',
+      headers: {
+        'x-rapidapi-key': process.env.RAPID_API_KEY,
+        'x-rapidapi-host': 'chatgpt-42.p.rapidapi.com',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        messages: [
+          {
+            role: 'user',
+            content: promptText
+          }
+        ],
+        web_access: false
+      })
     };
 
-    const analysis = generateAnalysis(req.body);
+    const response = await fetch(url, options);
+    const resultText = await response.text();
+
+    let analysis;
+    try {
+      const parsedResult = JSON.parse(resultText);
+      let contentString = "";
+
+      if (parsedResult.result) {
+        contentString = parsedResult.result;
+      } else if (parsedResult.choices && parsedResult.choices[0].message) {
+        contentString = parsedResult.choices[0].message.content;
+      } else {
+        contentString = resultText;
+      }
+
+      // Cleanup formatting if AI still outputs markdown
+      contentString = contentString.replace(/```json/g, "").replace(/```/g, "").trim();
+
+      analysis = JSON.parse(contentString);
+    } catch (e) {
+      console.error("Failed to parse AI response. Raw Response:", resultText);
+      console.error(e);
+      return res.status(500).json({ message: "Failed to parse analysis from AI provider" });
+    }
 
     const newReport = new Report({
       userId: req.user._id,
