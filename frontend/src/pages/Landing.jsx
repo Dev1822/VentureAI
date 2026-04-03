@@ -5,7 +5,10 @@ import {
   Zap,
 } from "lucide-react";
 
+import { useNavigate } from "react-router-dom";
+
 export default function Landing() {
+  const navigate = useNavigate();
   return (
     <div className="bg-[#f7f9fc] text-slate-900 font-inter">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -31,11 +34,11 @@ export default function Landing() {
             </div>
 
             {/* ALWAYS VISIBLE */}
-            <span className="text-slate-600 cursor-pointer text-sm whitespace-nowrap">
+            <span className="text-slate-600 cursor-pointer text-sm whitespace-nowrap" onClick={() => navigate("/login")}>
               Log in
             </span>
 
-            <button className="px-3 sm:px-4 py-2 text-xs sm:text-sm rounded-md bg-linear-to-r from-green-500 to-emerald-500 text-white shadow whitespace-nowrap">
+            <button className="px-3 sm:px-4 py-2 text-xs sm:text-sm rounded-md bg-linear-to-r from-green-500 to-emerald-500 text-white shadow whitespace-nowrap" onClick={() => navigate("/signup")}>
               Get Started
             </button>
           </div>
@@ -57,7 +60,7 @@ export default function Landing() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button className="flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-linear-to-r from-green-500 to-emerald-500 text-white shadow w-full sm:w-auto">
+                <button className="flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-linear-to-r from-green-500 to-emerald-500 text-white shadow w-full sm:w-auto" onClick={() => navigate("/signup")}>
                   Start Free Validation
                 </button>
 
@@ -119,8 +122,8 @@ export default function Landing() {
                       <div className="flex-1 flex items-end w-full">
                         <div
                           className={`w-full rounded-t-md ${i === 2
-                              ? "bg-linear-to-t from-green-500 to-emerald-500"
-                              : "bg-slate-300"
+                            ? "bg-linear-to-t from-green-500 to-emerald-500"
+                            : "bg-slate-300"
                             }`}
                           style={{ height: `${h}%` }}
                         />
@@ -184,7 +187,7 @@ export default function Landing() {
             Join founders building what users actually want.
           </p>
 
-          <button className="bg-white text-green-600 px-6 py-3 rounded-md font-semibold flex items-center gap-2 mx-auto">
+          <button className="bg-white text-green-600 px-6 py-3 rounded-md font-semibold flex items-center gap-2 mx-auto" onClick={() => navigate("signup")}>
             Generate Report <Zap size={18} />
           </button>
         </section>
