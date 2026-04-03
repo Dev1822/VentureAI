@@ -39,27 +39,26 @@ export default function ReportDetail() {
     const [report, setReport] = useState(null);
     const [loading, setLoading] = useState(true);
     const [downloading, setDownloading] = useState(false);
+    const [sharing, setSharing] = useState(false);
     const [animatedScore, setAnimatedScore] = useState(0);
     const [copied, setCopied] = useState(false);
 
-    const handleDownloadPDF = async () => {
-        setDownloading(true);
+    const generatePDFDocument = async () => {
+        const reportElement = document.getElementById("pdf-report");
+        if (!reportElement) {
+            throw new Error("Report element not found");
+        }
+
+        // Scroll to top to ensure capturing everything correctly bounds
+        window.scrollTo(0, 0);
+
+        // Force desktop layout for perfect Tailwind alignment regardless of user's screen
+        const originalStyle = reportElement.getAttribute('style');
+        reportElement.style.width = '1024px';
+        reportElement.style.maxWidth = '1024px';
+        reportElement.style.margin = '0 auto';
+
         try {
-            const reportElement = document.getElementById("pdf-report");
-            if (!reportElement) {
-                console.error("Report element not found");
-                return;
-            }
-
-            // Scroll to top to ensure capturing everything correctly bounds
-            window.scrollTo(0, 0);
-
-            // Force desktop layout for perfect Tailwind alignment regardless of user's screen
-            const originalStyle = reportElement.getAttribute('style');
-            reportElement.style.width = '1024px';
-            reportElement.style.maxWidth = '1024px';
-            reportElement.style.margin = '0 auto';
-
             const imgData = await toPng(reportElement, {
                 pixelRatio: 2,
                 backgroundColor: "#f8fafc",
@@ -91,7 +90,22 @@ export default function ReportDetail() {
             });
 
             pdf.addImage(imgData, "PNG", margin, margin, availableWidth, pdfImageHeight);
+            return pdf;
+        } catch (err) {
+            // Restore original styles in case of error
+            if (originalStyle) {
+                reportElement.setAttribute('style', originalStyle);
+            } else {
+                reportElement.removeAttribute('style');
+            }
+            throw err;
+        }
+    };
 
+    const handleDownloadPDF = async () => {
+        setDownloading(true);
+        try {
+            const pdf = await generatePDFDocument();
             const safeName = report?.name ? report.name.replace(/[^a-zA-Z0-9 -]/g, "") : "project";
             pdf.save(`${safeName} report.pdf`);
         } catch (err) {
@@ -104,7 +118,34 @@ export default function ReportDetail() {
 
     const handleShare = async () => {
         try {
-            // Priority 1: Modern Clipboard API
+            const safeName = report?.name ? report.name.replace(/[^a-zA-Z0-9 -]/g, "") : "project";
+
+            // Check if Web Share API with files is supported
+            if (navigator.share && navigator.canShare) {
+                setSharing(true);
+                try {
+                    const pdf = await generatePDFDocument();
+                    const pdfBlob = pdf.output("blob");
+                    const file = new File([pdfBlob], `${safeName} report.pdf`, { type: "application/pdf" });
+
+                    if (navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: `${report.name} - VentureAI Report`,
+                            text: `Check out the startup idea analysis for ${report.name} by VentureAI!`,
+                        });
+                        setSharing(false);
+                        return; // Successfully shared
+                    }
+                } catch (shareErr) {
+                    console.error("Web Share failed:", shareErr);
+                    // Continue to clipboard fallback
+                } finally {
+                    setSharing(false);
+                }
+            }
+
+            // Fallback: Priority 1 — Modern Clipboard API
             await navigator.clipboard.writeText(window.location.href);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
@@ -197,12 +238,19 @@ export default function ReportDetail() {
                     </div>
                     <div className="flex items-center gap-3">
                         <button
-                            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${copied ? "text-emerald-600 bg-emerald-50" : "text-slate-900 hover:bg-slate-50"
+                            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 ${copied ? "text-emerald-600 bg-emerald-50" : "text-slate-900 hover:bg-slate-50"
                                 }`}
                             onClick={handleShare}
+                            disabled={sharing}
                         >
-                            {copied ? <CheckCircle2 size={16} className="text-emerald-600" /> : <Share2 size={16} />}
-                            {copied ? "Copied!" : "Share"}
+                            {sharing ? (
+                                <Loader2 size={16} className="animate-spin text-emerald-600" />
+                            ) : copied ? (
+                                <CheckCircle2 size={16} className="text-emerald-600" />
+                            ) : (
+                                <Share2 size={16} />
+                            )}
+                            {sharing ? "Preparing..." : copied ? "Copied!" : "Share PDF"}
                         </button>
                         <button
                             className="premium-btn flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg shadow-sm disabled:opacity-50"
