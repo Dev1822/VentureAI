@@ -13,8 +13,10 @@ export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSignup = async () => {
+    setIsLoading(true);
     try {
       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/signup`, {
         method: "POST",
@@ -35,10 +37,13 @@ export default function Signup() {
       }
     } catch (err) {
       alert("Error signing up");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
+    setIsLoading(true);
     try {
       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google`, {
         method: "POST",
@@ -60,6 +65,8 @@ export default function Signup() {
     } catch (err) {
       console.error("Google Login Error:", err);
       alert("Google Login failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -220,9 +227,19 @@ export default function Signup() {
           <button
             className="premium-btn w-full py-3.5 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 mb-6"
             onClick={handleSignup}
+            disabled={isLoading}
           >
-            Create Account
-            <ArrowRight size={16} />
+            {isLoading ? (
+              <>
+                <span className="loader-spinner" />
+                Processing...
+              </>
+            ) : (
+              <>
+                Create Account
+                <ArrowRight size={16} />
+              </>
+            )}
           </button>
 
           {/* Terms */}
