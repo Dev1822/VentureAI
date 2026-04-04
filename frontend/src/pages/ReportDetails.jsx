@@ -188,7 +188,7 @@ export default function ReportDetail() {
     useEffect(() => {
         const fetchReport = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/reports/${id}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/reports/${id}`, {
                     headers: {
                         "Authorization": `Bearer ${localStorage.getItem("token")}`
                     }

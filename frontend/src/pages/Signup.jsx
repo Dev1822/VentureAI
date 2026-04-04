@@ -16,7 +16,7 @@ export default function Signup() {
 
   const handleSignup = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/signup", {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export default function Signup() {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/google", {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

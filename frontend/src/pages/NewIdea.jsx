@@ -38,7 +38,7 @@ export default function NewIdea() {
         setSubmitting(true);
 
         try {
-            const response = await fetch("http://localhost:5000/api/reports", {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/reports`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

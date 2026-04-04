@@ -43,7 +43,7 @@ export default function PitchDeck() {
 
         const fetchReports = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/reports", {
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/reports`, {
                     headers: {
                         "Authorization": `Bearer ${localStorage.getItem("token")}`
                     }
@@ -65,7 +65,7 @@ export default function PitchDeck() {
         setPitchDeck(null);
 
         try {
-            const response = await fetch(`http://localhost:5000/api/reports/${report._id}/pitch-deck`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/reports/${report._id}/pitch-deck`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${localStorage.getItem("token")}`,
