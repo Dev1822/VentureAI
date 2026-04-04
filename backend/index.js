@@ -451,22 +451,6 @@ Return strictly in this JSON format:
         futureVision: "AI Co-Founder simulations for hiring/resource allocation and automated Investor Matching for high-scoring concepts.",
         closingStatement: "Stop guessing. Start building. VentureAI is the future of data-driven startup inception."
       };
-    } else if (!process.env.RAPID_API_KEY) {
-      console.warn("RapidAPI key missing. Falling back to 12-slide mock deck.");
-      pitchDeck = {
-        problem: `Traditional validation in the ${report.industry} space is fragmented and relies on outdated data.`,
-        solution: `${report.name} centralizes validation logic to provide a 'Go/No-Go' decision in minutes.`,
-        uvp: "Real-time industry vertical analysis that generic tools cannot replicate.",
-        howItWorks: "Data ingestion -> Vertical benchmarking -> Viability scoring.",
-        marketOpportunity: `Estimated $1B+ opportunity within the ${report.industry} sector.`,
-        productDemo: "High-level risk heatmaps and revenue sensitivity analysis.",
-        businessModel: "SaaS-based subscription starting at $49/mo.",
-        competitiveAdvantage: "Proprietary scoring algorithm tuned for high-growth potential.",
-        gtmStrategy: "Direct B2B outreach and targeted developer communities.",
-        traction: "Prototypes validated with high user engagement scores.",
-        futureVision: "Integration with major CRM and project management suites.",
-        closingStatement: `The new standard for ${report.industry} innovation. Let's build it.`
-      };
     } else {
       const url = 'https://chatgpt-42.p.rapidapi.com/gpt4';
       const options = {
@@ -482,11 +466,42 @@ Return strictly in this JSON format:
         })
       };
 
-      const response = await fetch(url, options);
-      const resultText = await response.text();
-      
       try {
-        pitchDeck = JSON.parse(resultText);
+        const response = await fetch(url, options);
+        const resultText = await response.text();
+
+        if (!process.env.RAPID_API_KEY || response.status !== 200) {
+          console.warn("RapidAPI key missing or failed. Falling back to 12-slide mock deck.");
+          pitchDeck = {
+            problem: `Traditional validation in the ${report.industry} space is fragmented and relies on outdated data.`,
+            solution: `${report.name} centralizes validation logic to provide a 'Go/No-Go' decision in minutes.`,
+            uvp: "Real-time industry vertical analysis that generic tools cannot replicate.",
+            howItWorks: "Data ingestion -> Vertical benchmarking -> Viability scoring.",
+            marketOpportunity: `Estimated $1B+ opportunity within the ${report.industry} sector.`,
+            productDemo: "High-level risk heatmaps and revenue sensitivity analysis.",
+            businessModel: "SaaS-based subscription starting at $49/mo.",
+            competitiveAdvantage: "Proprietary scoring algorithm tuned for high-growth potential.",
+            gtmStrategy: "Direct B2B outreach and targeted developer communities.",
+            traction: "Prototypes validated with high user engagement scores.",
+            futureVision: "Integration with major CRM and project management suites.",
+            closingStatement: `The new standard for ${report.industry} innovation. Let's build it.`
+          };
+        } else {
+          const parsedResult = JSON.parse(resultText);
+          let contentString = "";
+
+          if (parsedResult.result) {
+            contentString = parsedResult.result;
+          } else if (parsedResult.choices && parsedResult.choices[0].message) {
+            contentString = parsedResult.choices[0].message.content;
+          } else {
+            contentString = resultText;
+          }
+
+          // Cleanup formatting if AI still outputs markdown
+          contentString = contentString.replace(/```json/g, "").replace(/```/g, "").trim();
+          pitchDeck = JSON.parse(contentString);
+        }
       } catch (e) {
         console.error("AI returned invalid JSON for pitch deck. Falling back to mock.");
         pitchDeck = {
@@ -505,6 +520,7 @@ Return strictly in this JSON format:
         };
       }
     }
+
 
     res.json(pitchDeck);
 

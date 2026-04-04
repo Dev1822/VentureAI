@@ -73,10 +73,14 @@ export default function PitchDeck() {
                 }
             });
             const data = await response.json();
-            setPitchDeck(data);
+            if (data && data.problem) {
+                setPitchDeck(data);
+            } else {
+                throw new Error("Invalid pitch deck format received");
+            }
         } catch (error) {
             console.error("Error generating pitch deck:", error);
-            alert("Failed to generate pitch deck. Please try again.");
+            alert("Failed to generate pitch deck. The AI response was incomplete or invalid. Please try a different idea or try again later.");
         } finally {
             setIsGenerating(false);
         }
